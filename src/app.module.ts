@@ -7,7 +7,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import config from './config/keys';
 import { ConfigService } from '@nestjs/config';
 import { ConfigModule } from '@nestjs/config';
-import { MongoosModuleModule } from './mongoos-module/mongoos-module.module';
+import { CustomersModule } from './customers/customers.module';
+import { ProductsModule } from './products/products.module';
+import { SupplierModule } from './supplier/supplier.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { OrdersModule } from './orders/orders.module';
 
 
 @Module({
@@ -16,11 +20,21 @@ import { MongoosModuleModule } from './mongoos-module/mongoos-module.module';
       isGlobal: true,
       load: [config],
     }),
-      MongooseModule.forRoot('mongodb+srv://one_user_one:pgnP9v_CJrxy%40BJ@cluster0.pnwidkg.mongodb.net/', {dbName: "dashboard"
+     MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('mongoUri'),
+        dbName: configService.get<string>('mongoDbName'),
+      }),
+      inject: [ConfigService],
     }),
     UsersModule,
     AuthModule,
-    MongoosModuleModule,
+    CustomersModule,
+    ProductsModule,
+    SupplierModule,
+    DashboardModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
