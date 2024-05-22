@@ -1,26 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Customers } from './Schema/customers.schems';
+import { Model} from 'mongoose';
 
 @Injectable()
 export class CustomersService {
-  create(createCustomerDto: CreateCustomerDto) {
-    return 'This action adds a new customer';
-  }
+constructor(@InjectModel(Customers.name) private customersModule: Model<Customers>){}
 
   findAll() {
-    return `This action returns all customers`;
+    return this.customersModule.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
-  }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} customer`;
+   findOne(id: string) {
+      return this.customersModule.findById(id);
   }
 }

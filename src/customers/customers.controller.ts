@@ -1,16 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
+import mongoose from 'mongoose';
 
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
-  @Post()
-  create(@Body() createCustomerDto: CreateCustomerDto) {
-    return this.customersService.create(createCustomerDto);
-  }
 
   @Get()
   findAll() {
@@ -18,17 +15,11 @@ export class CustomersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.customersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto) {
-    return this.customersService.update(+id, updateCustomerDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.customersService.remove(+id);
-  }
+    async getUsersById(@Param('id') id: string) {
+        const validId = mongoose.Types.ObjectId.isValid(id);
+        if (!validId) throw new HttpException('User not found', 404);
+        const findUser = await this.customersService.findOne(id);
+        if (!findUser) throw new HttpException('User not found', 404);
+        return findUser;
+    }
 }

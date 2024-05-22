@@ -5,18 +5,16 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(private readonly ordersService: OrdersService) { }
 
 
-
-  @Get()
-  findAll() {
-    return this.ordersService.findAll();
+ @Get()
+  async find(@Query('name') name?: string) {
+   if (name) {
+      return this.ordersService.findOne(name);
+   } else {
+      return this.ordersService.findAll();
+    }
   }
-
-  @Get()
-  findOne(@Query('name') name: string) {
-    return this.ordersService.findOne(name);
-  }
-
 }
+ 

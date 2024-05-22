@@ -14,7 +14,7 @@ export class OrdersService {
   }
 
   findOne(name: string) {
-    return this.ordersModule.find({ name: name });
+      return this.ordersModule.find({ name: new RegExp(name, 'i') }).exec();
   }
 
 }
