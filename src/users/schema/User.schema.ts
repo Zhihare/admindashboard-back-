@@ -10,6 +10,9 @@ export class User {
     email: string;
 
     @Prop({required: false })
+    name: string;
+
+    @Prop({required: false })
     token?: string;
 
     @Prop({required: false})

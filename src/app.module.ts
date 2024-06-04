@@ -12,6 +12,7 @@ import { ProductsModule } from './products/products.module';
 import { SupplierModule } from './supplier/supplier.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { OrdersModule } from './orders/orders.module';
+import { TokenModule } from './token/token.module';
 
 
 @Module({
@@ -35,6 +36,7 @@ import { OrdersModule } from './orders/orders.module';
     SupplierModule,
     DashboardModule,
     OrdersModule,
+    TokenModule,
   ],
   controllers: [AppController],
   providers: [AppService],

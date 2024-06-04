@@ -6,7 +6,6 @@ import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
-import { AppError } from 'src/common/const/errors';
 
 @Injectable()
 export class UsersService {
@@ -47,4 +46,13 @@ export class UsersService {
     deleteUser(id: string) {
         return this.usersModule.findByIdAndDelete(id);
     }
+
+    
+   async publicUser(email: string) {
+    const user = await this.usersModule.findOne({ email: email }).select('-password');
+    
+    console.log('User found:', user);
+    
+    return user;
+}
 }

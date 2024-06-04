@@ -4,17 +4,16 @@ import { CreateUserDto } from './dto/createUser.dto';
 import mongoose from 'mongoose';
 import { UpdateUserDto } from './dto/updateUser.dto';
 
-@Controller('users')
+@Controller('user')
 export class UsersController {
     constructor(private userService: UsersService){}
-    @Post()
-        @UsePipes(new ValidationPipe())
-        
-        createUser(@Body() createUserDto: CreateUserDto) {
-        return this.userService.createUser(createUserDto);
-    }
+    // @Post('/register')
+    //     @UsePipes(new ValidationPipe())
+    //     createUser(@Body() createUserDto: CreateUserDto) {
+    //     return this.userService.createUser(createUserDto);
+    // }
 
-    @Get()
+    @Get('/user-info')
     getUsers() {
         return this.userService.getUser()
     }
