@@ -1,8 +1,10 @@
-import { Controller, Get, Param, HttpException } from '@nestjs/common';
+import { Controller, Get, Param, HttpException, UseGuards } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 
 import mongoose from 'mongoose';
+import { JwtAuthGuard } from 'src/guards/jwt-quard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}

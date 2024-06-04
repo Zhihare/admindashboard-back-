@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, UsePipes, ValidationPipe, HttpException, UseGuards } from '@nestjs/common';
 import { SupplierService } from './supplier.service';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import mongoose from 'mongoose';
-
+import { JwtAuthGuard } from 'src/guards/jwt-quard';
+@UseGuards(JwtAuthGuard)
 @Controller('suppliers')
 export class SupplierController {
   constructor(private readonly supplierService: SupplierService) { }

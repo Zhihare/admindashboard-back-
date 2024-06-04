@@ -1,17 +1,12 @@
-import { Body, Controller, Get, HttpException, Param, Patch, Post, UsePipes, ValidationPipe, Delete } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Param, Patch, Post, UsePipes, ValidationPipe, Delete, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/createUser.dto';
 import mongoose from 'mongoose';
 import { UpdateUserDto } from './dto/updateUser.dto';
-
+import { JwtAuthGuard } from 'src/guards/jwt-quard';
+@UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UsersController {
     constructor(private userService: UsersService){}
-    // @Post('/register')
-    //     @UsePipes(new ValidationPipe())
-    //     createUser(@Body() createUserDto: CreateUserDto) {
-    //     return this.userService.createUser(createUserDto);
-    // }
 
     @Get('/user-info')
     getUsers() {
