@@ -6,4 +6,5 @@ export default () =>
     host: process.env.HOST || 'localhost',
     secretJwt: process.env.SECRET,
     expireJwt: process.env.EXPIREJWT,
+    expireRefreshJwt: process.env.EXPIRE_JWT_REFRESH,
 })

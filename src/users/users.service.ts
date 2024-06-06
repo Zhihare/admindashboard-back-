@@ -1,19 +1,17 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+
+import { Injectable} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from 'src/users/schema/User.schema';
-import { UsersModule } from './users.module';
-import * as bcrypt from 'bcrypt';
+import { User } from './schema/User.schema';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectModel(User.name) private usersModule: Model<User>) { }
+    constructor(@InjectModel(User.name) private usersModule: Model<User>) {}
 
-  
-
-    async hashPassward  (password: string) {
+    async hashPassword(password: string) {
         return await bcrypt.hash(password, 10);
     }
 
@@ -22,37 +20,41 @@ export class UsersService {
     }
 
     async findUserByEmail(email: string) {
-    return await this.usersModule.findOne({ email: email });
+        return await this.usersModule.findOne({ email: email });
     }
 
-    async createUser(CreateUserDto: CreateUserDto) {
-        CreateUserDto.password = await this.hashPassward(CreateUserDto.password);
-        const newUser = await new this.usersModule(CreateUserDto);
+    async createUser(createUserDto: CreateUserDto) {
+        createUserDto.password = await this.hashPassword(createUserDto.password);
+        const newUser = new this.usersModule(createUserDto);
         return await newUser.save();
     }
 
-    getUser() {
+    async getUser() {
         return this.usersModule.find();
     }
 
-    getUserById(id: string) {
-        return this.usersModule.findById(id)
+    async getUserById(id: string) {
+        return this.usersModule.findById(id);
     }
 
-    updateUser(id: string, updateUserDto: UpdateUserDto) {
-        return this.usersModule.findByIdAndUpdate(id, updateUserDto, {new: true})
+    async updateUser(id: string, updateUserDto: UpdateUserDto) {
+        return this.usersModule.findByIdAndUpdate(id, updateUserDto, { new: true });
     }
 
-    deleteUser(id: string) {
+    async deleteUser(id: string) {
         return this.usersModule.findByIdAndDelete(id);
     }
 
-    
-   async publicUser(email: string) {
-    const user = await this.usersModule.findOne({ email: email }).select('-password');
-    
-    console.log('User found:', user);
-    
-    return user;
-}
+    async updateUserRefreshToken(email: string, refreshToken: string, token: string) {
+        return this.usersModule.findOneAndUpdate({ email }, { refreshToken , token}, { new: true });
+    }
+
+    async clearRefreshToken(email: string) {
+        return this.usersModule.findOneAndUpdate({ email }, { refreshToken: '', token: '' }, {new: true });
+    }
+
+    async publicUser(email: string) {
+        const user = await this.usersModule.findOne({ email: email }).select('-password').lean();
+        return user;
+    }
 }

@@ -9,4 +9,7 @@ export class ResponseAuth {
 
     @IsString()
     token: string;
+
+    @IsString()
+    refreshToken: string;
 }
